@@ -18,11 +18,11 @@ export class DomainsController {
     if(req.params.type === 'json'){
       DomainsService.all().then(r => {
         if (r) res.json(r)
-        else res.status(404).json({ code: 404, message: 'error', datas:[] });
+        else res.status(404).json({ code: 404, message: 'error'});
       });
     }
     else
-      res.status(400).json({ code: 400, message: 'error' , datas:[] })
+      res.status(400).json({ code: 400, message: 'error', datas:[] })
   }
 
   // byId(req: Request, res: Response): void {
