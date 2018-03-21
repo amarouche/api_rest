@@ -6,7 +6,7 @@ let id = 0;
 interface Success {
   code: number,
   message: string,
-  data: any,
+  datas: any,
 };
 let domain
 // const examples: Success[] = [
@@ -18,11 +18,7 @@ let domain
     return new Promise<Success> (function(resolve, reject){
       let db = connect.query("select id, slug, name, description from domain;", function (err, result) {
         if (err) throw err;
-        // var resultat:Success[]=[
-        //   { code: 200, message: 'success', data: result }
-        // ]
-        // domain =  resultat
-        resolve({ code: 200, message: 'success', data: result })
+        resolve({ code: 200, message: 'success', datas: result })
       });
     })
   }

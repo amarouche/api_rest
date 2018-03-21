@@ -5,6 +5,6 @@ import { request } from 'https';
 export default function routes(app: Application): void {
   app.use('/api/', Router);
   app.use(function(req, res, next) {
-    res.status(404).json({ code: 404, message: 'error' });
+    res.status(404).json({ code: 404, message: 'error' , datas:[] });
   })
 };
