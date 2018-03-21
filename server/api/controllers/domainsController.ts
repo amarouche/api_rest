@@ -5,12 +5,12 @@ interface ERROR {
   code: number,
   message: string,
 };
-const err: ERROR[] = [
-    { code: 404, message: 'error' }
-];
-const errs: ERROR[] = [
-  { code: 400, message: 'error' }
-];
+// const err: ERROR[] = [
+//     { code: 404, message: 'error' }
+// ];
+// const errs: ERROR[] = [
+//   { code: 400, message: 'error' }
+// ];
 
 
 export class DomainsController {
@@ -18,11 +18,11 @@ export class DomainsController {
     if(req.params.type === 'json'){
       DomainsService.all().then(r => {
         if (r) res.json(r)
-        else res.status(404).json(err);
+        else res.status(404).json({ code: 404, message: 'error', datas:[] });
       });
     }
     else
-      res.status(400).json(errs)
+      res.status(400).json({ code: 400, message: 'error' , datas:[] })
   }
 
   // byId(req: Request, res: Response): void {
