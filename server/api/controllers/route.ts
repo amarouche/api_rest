@@ -4,4 +4,4 @@ export default express.Router()
     //.post('/domains.:type', controller.create)
     // .get('/', domainsController.all)
     .get('/domains.:type', domainsController.all)
-    // .get('/domains.:type/:id', domainsController.byId);
+    .get('/domains/mailer.:type', domainsController.mailer);
