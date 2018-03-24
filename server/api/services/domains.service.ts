@@ -29,8 +29,8 @@ let domain
       let db = connect.query(mailerRequest, function (err, result) {
         if (err) throw err;
        
-        L.info(resultMailer(result), 'Result all examples');
-        resolve({ code: 200, message: 'success', datas: resultMailer(result) })
+        // L.info(resultMailer(result), 'Result all examples');
+        resolve({ code: 200, message: 'success', datas: resultMailer(result)[0] })
       });
     })
   }
