@@ -8,7 +8,6 @@ interface Success {
   message: string,
   datas: any,
 };
-let mailerRequest = "SELECT domain.id,slug, name,description, GROUP_CONCAT(domain_lang.lang_id) as langs, user.id as user_id,user.username, created_at FROM domain INNER JOIN domain_lang ON domain.id = domain_lang.domain_id INNER JOIN user ON domain.user_id = user.id  GROUP BY domain.id;";
 let domain
 // const examples: Success[] = [
 //     { code: 200, message: 'success', data:[] }
@@ -24,13 +23,15 @@ let domain
     })
   }
 
-  mailer(): Promise<Success>{
+  mailer(name): Promise<Success>{
     return new Promise<Success>(function(resolve,reject){
+      
+      let mailerRequest = "SELECT domain.id,slug, name,description, GROUP_CONCAT(domain_lang.lang_id) as langs, GROUP_CONCAT(domain_lang.domain_id) as domain_langs, user.id as user_id,user.username, created_at FROM domain INNER JOIN domain_lang INNER JOIN user ON domain.user_id = user.id  WHERE name = '"+ name+"'  GROUP BY domain.id;";
+
       let db = connect.query(mailerRequest, function (err, result) {
         if (err) throw err;
-       
-        // L.info(resultMailer(result), 'Result all examples');
-        resolve({ code: 200, message: 'success', datas: resultMailer(result)[0] })
+        L.info(result, 'Result all examples');
+        resolve({ code: 200, message: 'success', datas: resultMailer(result) })
       });
     })
   }
@@ -43,13 +44,32 @@ let domain
 
 function resultMailer(result:Array<any>):string[]{
   let allResult = [];
+ 
   result.forEach(element => {
+    let arrayLang = []
     let creator = {
       "id": element['user_id'],
       "username": element['username']
     }
+    let domainLang = element['domain_langs'].split(",")
+    // domainLang.forEach(([key, value]) => {
+    //   L.info(key, value);
+
+    // // if(value == element['id'])
+    // //   {
+    // //     arrayLang.push()
+    // //   }
+    // })
+    for(let k in domainLang){
+      if(domainLang[k] == element['id'])
+      {
+        arrayLang.push(element['langs'].split(",")[k])
+      }
+    } 
+    L.info(arrayLang);
+        
     let r = { 
-      "langs":  element['langs'].split(","),
+      "langs":  arrayLang,
       "id":  element['id'],
       "slug": element['slug'],
       "name": element['name'],
@@ -59,6 +79,10 @@ function resultMailer(result:Array<any>):string[]{
   };
     allResult.push(r)
   });
-  return allResult;
+  if(allResult[0] == null)
+  {
+    return [];
+  }
+  return allResult[0];
 }
 export default new DomainsService();
