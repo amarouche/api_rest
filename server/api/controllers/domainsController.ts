@@ -26,7 +26,7 @@ export class DomainsController {
   }
   mailer(req: Request, res: Response): void {
     if(req.params.type === 'json'){
-      // if(req.params.mailer === 'mailer'){
+      if(req.params.typeMailer === 'mailer' || req.params.typeMailer === 'documents'){
         DomainsService.mailer(req.params.typeMailer).then(r => {
           if (r) {
             // if(req.params.typeMailer === 'mailer'){
@@ -44,8 +44,8 @@ export class DomainsController {
           }
           else res.status(404).json({ code: 404, message: 'error'});
         });
-      // }
-      // else res.status(404).json({ code: 404, message: 'su'});
+       }
+       else res.status(404).json({ code: 404, message: 'error'});
       
     }
     else
