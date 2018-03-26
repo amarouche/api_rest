@@ -24,23 +24,12 @@ export class DomainsController {
     else
       res.status(400).json({ code: 400, message: 'error', datas:[] })
   }
-  mailer(req: Request, res: Response): void {
+  getName(req: Request, res: Response): void {
     if(req.params.type === 'json'){
-      if(req.params.typeMailer === 'mailer' || req.params.typeMailer === 'documents'){
-        DomainsService.mailer(req.params.typeMailer).then(r => {
+      if(req.params.name === 'mailer' || req.params.name === 'documents'){
+        DomainsService.getName(req.params.name).then(r => {
           if (r) {
-            // if(req.params.typeMailer === 'mailer'){
               res.json(r)
-          
-            // }
-            // else if(req.params.typeMailer === 'document'){
-              // res.json(r)
-          
-            // }
-            // else{
-              // res.status(200).json({ code: 200, message: 'success',  datas:[] });
-              
-          // }
           }
           else res.status(404).json({ code: 404, message: 'error'});
         });
@@ -51,8 +40,16 @@ export class DomainsController {
     else
       res.status(400).json({ code: 400, message: 'error', datas:[] })
   }
-
-
+  getTrans(req: Request, res: Response): void {
+    if(req.params.type === 'json'){
+      DomainsService.getTrans().then(r => {
+        if (r) res.json(r)
+        else res.status(404).json({ code: 404, message: 'error'});
+      });
+    }
+    else
+      res.status(400).json({ code: 400, message: 'error', datas:[] })
+  }
   // byId(req: Request, res: Response): void {
   //   DomainsService.byId(req.params.id).then(r => {
   //     if (r) res.json(r);
