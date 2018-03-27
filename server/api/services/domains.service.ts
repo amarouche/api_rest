@@ -23,25 +23,30 @@ let domain
     })
   }
 
-  getName(name): Promise<Success>{
-    return new Promise<Success>(function(resolve,reject){
+  getName(name): Promise<any>{
+    return new Promise(function(resolve,reject){
       
       let mailerRequest = "SELECT domain.id,slug, name,description, GROUP_CONCAT(domain_lang.lang_id) as langs, GROUP_CONCAT(domain_lang.domain_id) as domain_langs, user.id as user_id,user.username, created_at FROM domain INNER JOIN domain_lang INNER JOIN user ON domain.user_id = user.id  WHERE name = '"+ name+"'  GROUP BY domain.id;";
 
       let db = connect.query(mailerRequest, function (err, result) {
         if (err) throw err;
-        L.info(result, 'Result all examples');
-        resolve({ code: 200, message: 'success', datas: resultName(result) })
+        if(resultName(result).length > 0)
+        {
+          resolve({ code: 404, message: 'error' })
+        }
+        else{
+        resolve({ code: 200, message: 'success', datas: resultName(result) })}
       });
     })
   }
+
   getTrans():Promise<Success>{
     return new Promise<Success>(function(resolve,reject){
       
       let Request = "SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE 1;"
       let db = connect.query(Request, function (err, result) {
         if (err) throw err;
-        
+        console.log(resultTrans(result))
         resolve({ code: 200, message: 'success', datas: resultTrans(result) })
       });
     })
@@ -54,27 +59,35 @@ let domain
 
 function resultTrans(result:Array<any>):string[]{
   // L.info(result, 'Result all examples');
+  
+
   let allResult = [];
   result.forEach(element => {
+    var obj={};
     let LangTrans = element['trans'].split(",")
-    var obj = Array;
+    let t =[]
     LangTrans.forEach(e=>{
       let one = e.split(".");
-      
-      obj[one[0]]= one[1]
-      // langs.push()
-      // console.log(langs , "===")
+      let mykey = one[0]
+      let monObjet = Object.create({})
+      obj[mykey] = one[1] 
     })
-    console.log(obj)
+    
+    console.log((obj))
     let r = { 
       "langs":  obj,
       "id":  element['id'],
       "code": element['code'],
   };
+      // console.log(r)
+  
     allResult.push(r)
+    
   });
+  // console.log(allResult)
   return allResult;
 }
+
 
 function resultName(result:Array<any>):string[]{
   let allResult = [];
@@ -104,7 +117,7 @@ function resultName(result:Array<any>):string[]{
   });
   if(allResult[0] == null)
   {
-    return [];
+    return ["vide"];
   }
   return allResult[0];
 }
