@@ -5,13 +5,14 @@ export class PostController {
 
     transPost(req: Request, res: Response): void {
         // if(req.params.type === 'json'){
-            console.log(req.headers.authorization)
-            PostService.transPost(req.body.code, req.body.trans, req.params.name, req.headers.authorization).then(r => {
+            PostService.transPost(req.body.code, req.body.trans, req.params.name, req.headers.authorization).then((r:any) => {
               if (r) {
-                
+                //   if(r[code] ===)
+                console.log(r.code)
                   res.json(r)
+
               }
-              //else res.status(404).json({ code: 404, message: 'error'});
+              else res.status(404).json({ code: 404, message: 'error'});
             });
         }
 

@@ -26,7 +26,7 @@ let domain
   getName(name): Promise<any>{
     return new Promise(function(resolve,reject){
       
-      let mailerRequest = "SELECT domain.id,slug, name,description, GROUP_CONCAT(domain_lang.lang_id) as langs, GROUP_CONCAT(domain_lang.domain_id) as domain_langs, user.id as user_id,user.username, created_at FROM domain INNER JOIN domain_lang INNER JOIN user ON domain.user_id = user.id  WHERE name = '"+ name+"'  GROUP BY domain.id;";
+      let mailerRequest = "SELECT domain.id, slug, name,description, GROUP_CONCAT(domain_lang.lang_id) as langs, GROUP_CONCAT(domain_lang.domain_id) as domain_langs, user.id as user_id,user.username, created_at FROM domain INNER JOIN domain_lang INNER JOIN user ON domain.user_id = user.id  WHERE name = '"+ name+"'  GROUP BY domain.id;";
 
       let db = connect.query(mailerRequest, function (err, result) {
         if (err) throw err;
@@ -98,7 +98,7 @@ function resultTrans(result:Array<any>,lansgDom:Array<any>):string[]{
     
     // console.log((obj))
     let r = { 
-      "langs":  obj,
+      "trans":  obj,
       "id":  element['id'],
       "code": element['code'],
   };
