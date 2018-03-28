@@ -61,7 +61,7 @@ let domain
                   resolve({ code: 404, message: 'error', datas: [] })
                 }
                 else
-                  resolve({ code: 200, message: 'successs', datas: resultTrans(result,lansgDom) })
+                  resolve({ code: 200, message: 'success', datas: resultTrans(result,lansgDom) })
               })
           }
         })
