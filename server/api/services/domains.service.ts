@@ -40,14 +40,31 @@ let domain
     })
   }
 
-  getTrans():Promise<Success>{
+  getTrans(name):Promise<any>{
     return new Promise<Success>(function(resolve,reject){
-      
-      let Request = "SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE 1;"
+      let Request = "SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE domain_id = (SELECT id FROM domain WHERE name = '"+name+"');"
       let db = connect.query(Request, function (err, result) {
+        // console.log(result)
         if (err) throw err;
-        console.log(resultTrans(result))
-        resolve({ code: 200, message: 'success', datas: resultTrans(result) })
+        disp().then(r => {
+          let lansgDom=[];
+          let domain=[];
+          if (r) {
+            r.forEach(element => {
+              lansgDom.push(element["lang_id"])
+            });
+              getDomainName().then(t=>{
+                t.forEach(ele => {
+                  domain.push(ele["name"])
+                });
+                if(domain.indexOf(name) === -1){
+                  resolve({ code: 404, message: 'error', datas: [] })
+                }
+                else
+                  resolve({ code: 200, message: 'successs', datas: resultTrans(result,lansgDom) })
+              })
+          }
+        })
       });
     })
   }
@@ -57,11 +74,11 @@ let domain
   // }
 }
 
-function resultTrans(result:Array<any>):string[]{
-  // L.info(result, 'Result all examples');
-  
-
+function resultTrans(result:Array<any>,lansgDom:Array<any>):string[]{
+  let LangDomains;
   let allResult = [];
+  // console.log(result)
+  
   result.forEach(element => {
     var obj={};
     let LangTrans = element['trans'].split(",")
@@ -69,18 +86,22 @@ function resultTrans(result:Array<any>):string[]{
     LangTrans.forEach(e=>{
       let one = e.split(".");
       let mykey = one[0]
-      let monObjet = Object.create({})
-      obj[mykey] = one[1] 
+      lansgDom.forEach(langs => {
+        if(langs === mykey)
+        {
+          obj[mykey] = one[1] 
+        }
+        if(Object.keys(obj).indexOf(langs) === -1){
+        obj[langs] = element['code']}
+      });
     })
     
-    console.log((obj))
+    // console.log((obj))
     let r = { 
       "langs":  obj,
       "id":  element['id'],
       "code": element['code'],
   };
-      // console.log(r)
-  
     allResult.push(r)
     
   });
@@ -120,5 +141,31 @@ function resultName(result:Array<any>):string[]{
     return ["vide"];
   }
   return allResult[0];
+}
+
+function disp():Promise<any>{ 
+  {
+    return new Promise<Success>(function(resolve,reject){
+      let LangDomains
+      let db = connect.query("SELECT domain_id, lang_id FROM `domain_lang`", function (err, result) {
+        if (err) throw err;
+        LangDomains = result
+        resolve(LangDomains)
+      })
+    })
+  }
+}
+
+function getDomainName():Promise<any>{ 
+  {
+    return new Promise<Success>(function(resolve,reject){
+      let Domains
+      let db = connect.query("SELECT name, id FROM `domain`", function (err, result) {
+        if (err) throw err;
+        Domains = result
+        resolve(Domains)
+      })
+    })
+  }
 }
 export default new DomainsService();

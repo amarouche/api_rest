@@ -27,7 +27,7 @@ export class DomainsController {
   getName(req: Request, res: Response): void {
     if(req.params.type === 'json'){
         DomainsService.getName(req.params.name).then(r => {
-          if (r) {
+          if (r && r.code !== 404) {
               res.json(r)
           }
           else res.status(404).json({ code: 404, message: 'error'});
@@ -39,11 +39,12 @@ export class DomainsController {
 
   getTrans(req: Request, res: Response): void {
     if(req.params.type === 'json'){
-      DomainsService.getTrans().then(r => {
-        if (r) {res.json(r)
-        // console.log(r)
+      DomainsService.getTrans(req.params.name).then(r => {
+        if (r && r.code !== 404) {
+          res.json(r)
         }
-        else res.status(404).json({ code: 404, message: 'error'});
+        else
+        res.status(404).json({ code: 404, message: 'error'});
       });
     }
     else
