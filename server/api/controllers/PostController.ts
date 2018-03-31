@@ -13,12 +13,17 @@ export class PostController {
                     res.status(403).json({ code: 403, message: 'error domain'});
                 else if(r.code === 400)
                     res.status(400).json(r);
+                else if(req.params.type !== 'json')
+                res.status(400).json({ code: 400, message: 'error', datas:[] })
                 else
                     res.status(201).json(r)
               }
             
             });
-        }
+        // }
+       
+            
+    }
 
 }
 export default new PostController();
