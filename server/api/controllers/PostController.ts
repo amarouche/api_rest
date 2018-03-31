@@ -14,7 +14,7 @@ export class PostController {
                 else if(r.code === 400)
                     res.status(400).json(r);
                 else if(req.params.type !== 'json')
-                res.status(400).json({ code: 400, message: 'error', datas:[] })
+                    res.status(400).json({ code: 400, message: 'error', datas:[] })
                 else
                     res.status(201).json(r)
               }

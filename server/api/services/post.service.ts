@@ -6,10 +6,9 @@ import { realpathSync } from 'fs';
 
 class PostService {
 
-
     transPost(code,trans:object, name, authorization ){
         return new Promise (function(resolve, reject){
-            
+            let form:{}
             getAuthoUser(authorization).then(AuthoUser => {
                 if(_.isEmpty(AuthoUser))
                     resolve({code: 401})
@@ -24,18 +23,24 @@ class PostService {
                                 else
                                     // console.log(emptyElem(trans))
                                     if(code === '' || emptyElem(trans) === 1)
-                                        resolve({ code: 400, message: 'error parametre null '})
+                                        resolve({ code: 400, message: 'error', datas: "code or trans is empty"})
                                     else
                                     getDomainLang(trans).then(DomainLang => {
                                         // console.log(DomainLang)
                                         if(DomainLang[0])
-                                            resolve({ code: 400, message: 'error lang no found ' + DomainLang})
-                                        else 
+                                        { 
+                                            let lang ={ "lang": " lang no found "+DomainLang }
+                                            form = {"form": lang }
+                                            resolve({ code: 400, message: 'error', datas: form})
+                                        }
+                                            else 
                                             getCode(code).then(c =>{
-                                                if(!_.isEmpty(c))
-                                                    resolve({ code: 400, message: 'error code exist ' + code})
+                                                if(!_.isEmpty(c)){
+                                                    let lang = { "code":  code + " alredy exist"}
+                                                    form = {"form": lang }
+                                                    resolve({ code: 400, message: 'error' + code, datas:form})
+                                                    }
                                                 else
-                                               
                                                     getDomLangs(Domain[0].id).then(DomLangs =>{
                                                         insertTrans(code, Domain[0].id).then(insertT =>{
                                                             insertTransLang(code, trans, DomLangs, insertT).then(transLang =>{
