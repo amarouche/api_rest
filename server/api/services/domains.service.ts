@@ -40,9 +40,16 @@ let domain
     })
   }
 
-  getTrans(name):Promise<any>{
+  getTrans(name, code):Promise<any>{
     return new Promise<Success>(function(resolve,reject){
-      let Request = "SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE domain_id = (SELECT id FROM domain WHERE name = '"+name+"');"
+      let Request
+      //SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE code LIKE '%reg%'
+      if(code !== null){
+         Request = "SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE code LIKE '%"+code+"%';"
+      }
+      else{
+         Request = "SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE domain_id = (SELECT id FROM domain WHERE name = '"+name+"');"
+      }
       let db = connect.query(Request, function (err, result) {
         // console.log(result)
         if (err) throw err;

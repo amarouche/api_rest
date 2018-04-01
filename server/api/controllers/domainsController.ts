@@ -39,7 +39,12 @@ export class DomainsController {
 
   getTrans(req: Request, res: Response): void {
     if(req.params.type === 'json'){
-      DomainsService.getTrans(req.params.name).then(r => {
+      let code= null
+      if(req.query.code)
+      {
+        code = req.query.code
+      }
+      DomainsService.getTrans(req.params.name, code).then(r => {
         if (r && r.code !== 404) {
           res.json(r)
         }
