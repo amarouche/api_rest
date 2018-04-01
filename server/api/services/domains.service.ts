@@ -45,6 +45,7 @@ let domain
       let Request
       //SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE code LIKE '%reg%'
       if(code !== null){
+        console.log(code)
          Request = "SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE code LIKE '%"+code+"%';"
       }
       else{
