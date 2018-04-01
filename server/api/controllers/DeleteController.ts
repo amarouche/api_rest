@@ -1,4 +1,4 @@
-import DeleteService from '../services/Delete.service';
+import DeleteService from '../services/delete.service';
 import { Request, Response } from 'express';
 
 export class PostController {
