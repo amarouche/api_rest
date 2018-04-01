@@ -9,6 +9,8 @@ class PutService {
     transPut(id, trans, name, authorization ){
         return new Promise (function(resolve, reject){
             let form:{}
+            let tab = (<any>Object).values(trans)
+
             getAuthoUser(authorization).then(AuthoUser => {
                 if(_.isEmpty(AuthoUser))
                     resolve({code: 401})
@@ -22,9 +24,13 @@ class PutService {
                                         resolve({code: 403})
                                     else
                                         // console.log(emptyElem(trans))
-                                        if(emptyElem(trans) === 1)
-                                            resolve({ code: 400, message: 'error', datas: "trans is empty"})
-                                        else{
+                                        tab.forEach(element => {
+                                                if(element === '')
+                                                resolve({ code: 400, message: 'errodr', datas: "trans is empty"})
+                                            });
+                                        // if(emptyElem(trans) === 1)
+                                           
+                                        // else{
                                             getDomainLang(trans).then(DomainLang => {
                                                 // console.log(DomainLang)
                                                 if(DomainLang[0])
@@ -49,7 +55,7 @@ class PutService {
                                                 }
                 
                                             })
-                                        }
+                                        // }
                                     })
                             //})
                         }                              
