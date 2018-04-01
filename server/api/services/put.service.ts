@@ -22,7 +22,7 @@ class PutService {
                                         resolve({code: 403})
                                     else
                                         // console.log(emptyElem(trans))
-                                        if( emptyElem(trans) === 1)
+                                        if(emptyElem(trans) === 1)
                                             resolve({ code: 400, message: 'error', datas: "trans is empty"})
                                         else
                                             getDomainLang(trans).then(DomainLang => {
@@ -174,10 +174,16 @@ function arr_diff (a1, a2) {
 function emptyElem(trans) {
     let val:number = 0;
     let tab = (<any>Object).values(trans)
-    tab.forEach(element => {
-        if(element === '')
+    let key = Object.keys(trans)
+    for(let k in key)
+    {
+        if(tab[k] === '')
             val = 1;
-    });
+    }    
+    // tab.forEach(element => {
+    //     if(element === '')
+    //         val = 1;
+    // });
     return val
 }
 
