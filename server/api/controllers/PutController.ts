@@ -5,8 +5,8 @@ export class PutController {
 
     transPut(req: Request, res: Response): void {
         // // if(req.params.type === 'json'){
-            
-            PutService.transPut(req.params.id, req.body.trans,req.params.name, req.headers.authorization).then((r:any) => {
+            console.log('updating-', req.body);
+            PutService.transPut(req.params.id, req.body.trans, req.params.name, req.headers.authorization).then((r:any) => {
             if (r) {
                 if(r.code === 401)
                     res.status(401).json({ code: 401, message: 'error authorization'});
