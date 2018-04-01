@@ -175,21 +175,22 @@ function arr_diff (a1, a2) {
 
 function emptyElem(trans) {
     let val:boolean = false;
-    let tab = (<any>Object).values(trans)
-    //let key = Object.keys(trans)
-    //for(let k in key)
-   // {
-     //   if(tab[k] === '')
-       //     val = 1;
-   // }    
-    tab.forEach(element => {
-        if(element === '' || element === 'undefined' || element === 'null')
-            val = true;
-    });
-    // tab.forEach(element => {
-    //     if(element === '')
-    //          resolve({ code: 400, message: 'error', datas: "trans is empty"})
-    // });
+    if(trans === undefined || trans=== null || trans === ""){
+        val = true;
+    }
+    else{
+        let tab = (<any>Object).values(trans)
+        //let key = Object.keys(trans)
+  
+        tab.forEach(element => {
+            if(element === '' || element === 'undefined' || element === 'null')
+                val = true;
+        });
+        // tab.forEach(element => {
+        //     if(element === '')
+        //          resolve({ code: 400, message: 'error', datas: "trans is empty"})
+        // });
+    }
     return val
 }
 
