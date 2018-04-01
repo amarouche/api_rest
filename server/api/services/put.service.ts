@@ -183,7 +183,7 @@ function emptyElem(trans) {
        //     val = 1;
    // }    
     tab.forEach(element => {
-        if(element === '')
+        if(element === '' || element === undefined)
             val = true;
     });
     // tab.forEach(element => {
