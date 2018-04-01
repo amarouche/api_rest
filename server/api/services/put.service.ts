@@ -24,7 +24,7 @@ class PutService {
                                         // console.log(emptyElem(trans))
                                         if(emptyElem(trans) === 1)
                                             resolve({ code: 400, message: 'error', datas: "trans is empty"})
-                                        else
+                                        else{
                                             getDomainLang(trans).then(DomainLang => {
                                                 // console.log(DomainLang)
                                                 if(DomainLang[0])
@@ -49,7 +49,7 @@ class PutService {
                                                 }
                 
                                             })
-       
+                                        }
                                     })
                             //})
                         }                              
