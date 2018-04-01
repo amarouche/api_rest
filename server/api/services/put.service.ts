@@ -9,6 +9,7 @@ class PutService {
     transPut(id, trans:Object, name, authorization ){
         return new Promise (function(resolve, reject){
             let form:{}
+            console.log(trans, "tr")
             getAuthoUser(authorization).then(AuthoUser => {
                 if(_.isEmpty(AuthoUser))
                     resolve({code: 401})
