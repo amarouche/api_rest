@@ -117,6 +117,7 @@ function getDomainByUser(domain, autho_id)
           })
     })
 }
+
 function getCode(code){
     return new Promise (function(resolve,reject){
         let db = connect.query("SELECT  code FROM `translation` WHERE code ='"+code+"'", function (err, result) {
