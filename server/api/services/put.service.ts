@@ -26,8 +26,8 @@ class PutService {
                                         // console.log(emptyElem(trans))
                                         tab.forEach(element => {
                                                 if(element === '')
-                                                resolve({ code: 400, message: 'errodr', datas: "trans is empty"})
-                                            });
+                                               	 resolve({ code: 400, message: 'errodr', datas: "trans is empty"})
+						 });
                                         // if(emptyElem(trans) === 1)
                                            
                                         // else{
