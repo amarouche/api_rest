@@ -182,7 +182,7 @@ function emptyElem(trans) {
     else{
         let tab = (<any>Object).values(trans)
         //let key = Object.keys(trans)
-  
+        console.log(tab, "4", trans)
         tab.forEach(element => {
             console.log(element, "3")
             if(element === '' || element === 'undefined' || element === 'null'|| element === undefined || element === null )
