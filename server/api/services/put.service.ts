@@ -184,7 +184,7 @@ function emptyElem(trans) {
         //let key = Object.keys(trans)
   
         tab.forEach(element => {
-            if(element === '' || element === 'undefined' || element === 'null')
+            if(element === '' || element === 'undefined' || element === 'null'|| element === undefined || element === null )
             {
         console.log(trans, "2")
         val = true;
