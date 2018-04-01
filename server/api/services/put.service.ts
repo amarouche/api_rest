@@ -6,7 +6,7 @@ import { realpathSync } from 'fs';
 
 class PutService {
 
-    transPut(id, trans, name, authorization ){
+    transPut(id, trans:Object, name, authorization ){
         return new Promise (function(resolve, reject){
             let form:{}
             getAuthoUser(authorization).then(AuthoUser => {
