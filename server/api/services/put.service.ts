@@ -176,6 +176,7 @@ function arr_diff (a1, a2) {
 function emptyElem(trans) {
     let val:boolean = false;
     if(trans === undefined || trans=== null || trans === ""){
+        console.log(trans, "1")
         val = true;
     }
     else{
@@ -184,7 +185,11 @@ function emptyElem(trans) {
   
         tab.forEach(element => {
             if(element === '' || element === 'undefined' || element === 'null')
-                val = true;
+            {
+        console.log(trans, "2")
+        val = true;
+                
+            }
         });
         // tab.forEach(element => {
         //     if(element === '')
