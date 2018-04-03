@@ -50,7 +50,7 @@ function DeleteTrans(id){
         })
         resolve({code: 200,
         message: "success",
-        dayas: {
+        datas: {
             id: id
         }})
     })

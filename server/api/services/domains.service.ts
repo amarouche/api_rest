@@ -23,7 +23,7 @@ let domain
     })
   }
 
-  getName(name): Promise<any>{
+  getName(name,autho): Promise<any>{
     return new Promise(function(resolve,reject){
       
       let mailerRequest = "SELECT domain.id, slug, name,description, GROUP_CONCAT(domain_lang.lang_id) as langs, GROUP_CONCAT(domain_lang.domain_id) as domain_langs, user.id as user_id,user.username, created_at FROM domain INNER JOIN domain_lang INNER JOIN user ON domain.user_id = user.id  WHERE name = '"+ name+"'  GROUP BY domain.id;";

@@ -26,7 +26,12 @@ export class DomainsController {
   }
   getName(req: Request, res: Response): void {
     if(req.params.type === 'json'){
-        DomainsService.getName(req.params.name).then(r => {
+      let authorization = null
+      if(req.headers.authorization)
+      {
+        authorization = req.headers.authorization
+      }
+        DomainsService.getName(req.params.name, authorization).then(r => {
           if (r && r.code !== 404) {
               res.json(r)
           }
@@ -39,7 +44,7 @@ export class DomainsController {
 
   getTrans(req: Request, res: Response): void {
     if(req.params.type === 'json'){
-      let code= null
+      let code = null
       if(req.query.code)
       {
         code = req.query.code
