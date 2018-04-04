@@ -2,7 +2,6 @@ import DeleteService from '../services/delete.service';
 import { Request, Response } from 'express';
 
 export class PostController {
-
     transDelete(req: Request, res: Response): void {
         DeleteService.transDelete(req.params.id, req.params.name, req.headers.authorization).then((r:any) => {
             if (r) {
@@ -18,8 +17,7 @@ export class PostController {
                     res.status(200).json(r)
             }
         })
-
     }
-
 }
+
 export default new PostController();

@@ -9,9 +9,6 @@ interface Success {
   datas: any,
 };
 let domain
-// const examples: Success[] = [
-//     { code: 200, message: 'success', data:[] }
-// ];
 
  class DomainsService {
    all(): Promise<Success> {
@@ -23,20 +20,23 @@ let domain
     })
   }
 
-  getName(name,autho): Promise<any>{
+  getName(name, authorization): Promise<any>{
     return new Promise(function(resolve,reject){
-      
       let mailerRequest = "SELECT domain.id, slug, name,description, GROUP_CONCAT(domain_lang.lang_id) as langs, GROUP_CONCAT(domain_lang.domain_id) as domain_langs, user.id as user_id,user.username, created_at FROM domain INNER JOIN domain_lang INNER JOIN user ON domain.user_id = user.id  WHERE name = '"+ name+"'  GROUP BY domain.id;";
-
-      let db = connect.query(mailerRequest, function (err, result) {
-        if (err) throw err;
-        if(resultName(result).length > 0)
-        {
-          resolve({ code: 404, message: 'error' })
-        }
-        else{
-        resolve({ code: 200, message: 'success', datas: resultName(result) })}
-      });
+      
+        selectByautho(name,authorization).then(selBy =>{
+          let db = connect.query(mailerRequest, function (err, result) {
+            if (err) throw err;
+            if(resultName(result, selBy).length > 0)
+            {
+              resolve({ code: 404, message: 'error' })
+            }
+            else{
+              
+            resolve({ code: 200, message: 'success', datas: resultName(result, selBy) })
+          }
+          });
+        })
     })
   }
 
@@ -45,7 +45,6 @@ let domain
       let Request
       //SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE code LIKE '%reg%'
       if(code !== null){
-        console.log(code)
          Request = "SELECT id, code, (SELECT GROUP_CONCAT(CONCAT(lang_id, '.', trans)) FROM translation_to_lang WHERE translation_id = translation.id ) as trans FROM translation WHERE code LIKE '%"+code+"%';"
       }
       else{
@@ -76,10 +75,15 @@ let domain
       });
     })
   }
-  // byId(id: number): Promise<Success> {
-  //   L.info(`fetch example with id ${id}`);
-  //   return this.all().then(r => r[id])
-  // }
+}
+
+function selectByautho(domain, autho){
+  return new Promise (function(resolve,reject){
+    let db = connect.query("SELECT * FROM `user` WHERE id = (SELECT user_id FROM `domain` WHERE name = '"+domain+"')  AND password ='"+autho+"'", function (err, result) {
+      if (err) throw err;
+        resolve(result)
+    })
+  })
 }
 
 function resultTrans(result:Array<any>,lansgDom:Array<any>):string[]{
@@ -104,7 +108,6 @@ function resultTrans(result:Array<any>,lansgDom:Array<any>):string[]{
       });
     })
     
-    // console.log((obj))
     let r = { 
       "trans":  obj,
       "id":  element['id'],
@@ -113,19 +116,32 @@ function resultTrans(result:Array<any>,lansgDom:Array<any>):string[]{
     allResult.push(r)
     
   });
-  // console.log(allResult)
   return allResult;
 }
 
 
-function resultName(result:Array<any>):string[]{
+function resultName(result:Array<any>, selBy):string[]{
   let allResult = [];
   result.forEach(element => {
     let arrayLang = []
-    let creator = {
-      "id": element['user_id'],
-      "username": element['username']
+    let creator ={}
+
+    if(selBy.length > 0){
+      creator = {
+        "id": element['user_id'],
+        "username": element['username'],
+        "email": selBy[0].email
+        
+      }
     }
+    else{
+      creator = {
+        "id": element['user_id'],
+        "username": element['username'],
+      }
+    }
+
+    // console.log(element)
     let domainLang = element['domain_langs'].split(",")
     for(let k in domainLang){
       if(domainLang[k] == element['id'])
@@ -151,6 +167,8 @@ function resultName(result:Array<any>):string[]{
   return allResult[0];
 }
 
+
+
 function disp():Promise<any>{ 
   {
     return new Promise<Success>(function(resolve,reject){
@@ -168,7 +186,7 @@ function getDomainName():Promise<any>{
   {
     return new Promise<Success>(function(resolve,reject){
       let Domains
-      let db = connect.query("SELECT name, id FROM `domain`", function (err, result) {
+      let db = connect.query("SELECT name, id, user_id FROM `domain`", function (err, result) {
         if (err) throw err;
         Domains = result
         resolve(Domains)
@@ -176,4 +194,5 @@ function getDomainName():Promise<any>{
     })
   }
 }
+
 export default new DomainsService();

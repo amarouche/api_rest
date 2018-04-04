@@ -5,13 +5,6 @@ interface ERROR {
   code: number,
   message: string,
 };
-// const err: ERROR[] = [
-//     { code: 404, message: 'error' }
-// ];
-// const errs: ERROR[] = [
-//   { code: 400, message: 'error' }
-// ];
-
 
 export class DomainsController {
   all(req: Request, res: Response): void {
@@ -24,6 +17,7 @@ export class DomainsController {
     else
       res.status(400).json({ code: 400, message: 'error', datas:[] })
   }
+
   getName(req: Request, res: Response): void {
     if(req.params.type === 'json'){
       let authorization = null

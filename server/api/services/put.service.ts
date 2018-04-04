@@ -9,7 +9,6 @@ class PutService {
     transPut(id, trans:Object, name, authorization ){
         return new Promise (function(resolve, reject){
             let form:{}
-            console.log(trans, "tr")
             getAuthoUser(authorization).then(AuthoUser => {
                 if(_.isEmpty(AuthoUser))
                     resolve({code: 401})
@@ -46,7 +45,7 @@ class PutService {
                                                     else
                                                         putLang(id, trans).then(put => {
                                                             
-                                                            resolve({ code: 200, message: 'succdess', datas: put})
+                                                            resolve({ code: 200, message: 'success', datas: put})
                                                         })  
                                                     })
                                                 }
